@@ -1,5 +1,13 @@
 # CHANGELOG - pgbouncer
 
+## 2.0.0 / 2021-07-12
+
+* [Changed] Upgrade psycopg2-binary to 2.8.6. See [#9535](https://github.com/DataDog/integrations-core/pull/9535).
+
+## 1.12.2 / 2021-03-07 / Agent 7.27.0
+
+* [Fixed] Bump minimum base package version. See [#8443](https://github.com/DataDog/integrations-core/pull/8443).
+
 ## 1.12.1 / 2020-12-11 / Agent 7.25.0
 
 * [Fixed] Make pgbouncer more reslient. See [#8124](https://github.com/DataDog/integrations-core/pull/8124).

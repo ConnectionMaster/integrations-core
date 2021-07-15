@@ -8,12 +8,12 @@ import re
 import click
 import requests
 
-from ....utils import ensure_dir_exists, path_join, write_file
+from ....fs import ensure_dir_exists, path_join, write_file
 from ...constants import get_root
 from ...utils import get_valid_integrations, load_manifest, write_manifest
 from ..console import CONTEXT_SETTINGS, abort, echo_success
 
-BOARD_ID_PATTERN = r'{site}/[^/]+/([^/]+)/.*'
+BOARD_ID_PATTERN = r'{site}/[^/]+/([^/]+)'
 DASHBOARD_API = 'https://api.{site}/api/v1/dashboard/{board_id}'
 REQUIRED_FIELDS = ["layout_type", "title", "description", "template_variables", "widgets"]
 
@@ -92,7 +92,7 @@ def export(ctx, url, integration, author):
                 match = display_name
 
         if match:
-            new_file_name = file_name.replace(match, '', 1).strip()
+            new_file_name = file_name.replace(match, '', 1).strip(" -")
             if new_file_name:
                 file_name = new_file_name
 

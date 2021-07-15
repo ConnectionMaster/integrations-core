@@ -2,24 +2,11 @@
 # All rights reserved
 # Licensed under Simplified BSD License (see LICENSE)
 import socket
-import time
 from contextlib import closing
 
-from six import PY3
-
 from datadog_checks.base import AgentCheck, ConfigurationError
-from datadog_checks.base.utils.platform import Platform
-
-if PY3:
-    # use higher precision clock available in Python3
-    time_func = time.perf_counter
-elif Platform.is_win32():
-    # for tiny time deltas, time.time on Windows reports the same value
-    # of the clock more than once, causing the computation of response_time
-    # to be often 0; let's use time.clock that is more precise.
-    time_func = time.clock
-else:
-    time_func = time.time
+from datadog_checks.base.errors import CheckException
+from datadog_checks.base.utils.time import get_precise_time
 
 
 class TCPCheck(AgentCheck):
@@ -32,24 +19,25 @@ class TCPCheck(AgentCheck):
         instance = self.instances[0]
 
         self.instance_name = self.normalize_tag(instance['name'])
-        port = instance.get('port', None)
         self.timeout = float(instance.get('timeout', 10))
         self.collect_response_time = instance.get('collect_response_time', False)
-        custom_tags = instance.get('tags', [])
+        self.url = instance.get('host', None)
         self.socket_type = None
+        self._addr = None
 
+        port = instance.get('port', None)
         try:
             self.port = int(port)
         except Exception:
             raise ConfigurationError("{} is not a correct port.".format(str(port)))
         try:
-            self.url = instance.get('host', None)
             split_url = self.url.split(":")
         except Exception:  # Would be raised if url is not a string
             raise ConfigurationError("A valid url must be specified")
 
+        custom_tags = instance.get('tags', [])
         self.tags = [
-            'url:{}:{}'.format(instance.get('host', None), self.port),
+            'url:{}:{}'.format(self.url, self.port),
             'instance:{}'.format(instance.get('name')),
         ] + custom_tags
 
@@ -65,33 +53,41 @@ class TCPCheck(AgentCheck):
                 if len(block) != 4:
                     raise ConfigurationError("{} is not a correct IPv6 address.".format(self.url))
             # It's a correct IP V6 address
-            self.addr = self.url
+            self._addr = self.url
             self.socket_type = socket.AF_INET6
         else:
             self.socket_type = socket.AF_INET
+            # IP will be resolved at check time
+
+    @property
+    def addr(self):
+        if self._addr is None:
             try:
                 self.resolve_ip()
-            except Exception:
-                msg = "URL: {} is not a correct IPv4, IPv6 or hostname".format(self.url)
-                raise ConfigurationError(msg)
+            except Exception as e:
+                self.log.debug(str(e))
+                msg = "URL: {} could not be resolved".format(self.url)
+                raise CheckException(msg)
+        return self._addr
 
     def resolve_ip(self):
-        self.addr = socket.gethostbyname(self.url)
+        self._addr = socket.gethostbyname(self.url)
+        self.log.debug("%s resolved to %s", self.url, self._addr)
 
     def connect(self):
         with closing(socket.socket(self.socket_type)) as sock:
             sock.settimeout(self.timeout)
-            start = time_func()
+            start = get_precise_time()
             sock.connect((self.addr, self.port))
-            response_time = time_func() - start
+            response_time = get_precise_time() - start
             return response_time
 
     def check(self, instance):
-        start = time_func()  # Avoid initialisation warning
-        self.log.debug("Connecting to %s %d", self.addr, self.port)
+        start = get_precise_time()  # Avoid initialisation warning
+        self.log.debug("Connecting to %s %d", self.url, self.port)
         try:
             response_time = self.connect()
-            self.log.debug("%s:%d is UP", self.addr, self.port)
+            self.log.debug("%s:%d is UP", self.url, self.port)
             self.report_as_service_check(AgentCheck.OK, 'UP')
             if self.collect_response_time:
                 self.gauge(
@@ -100,7 +96,7 @@ class TCPCheck(AgentCheck):
                     tags=self.tags,
                 )
         except Exception as e:
-            length = int((time_func() - start) * 1000)
+            length = int((get_precise_time() - start) * 1000)
             if isinstance(e, socket.error) and "timed out" in str(e):
                 # The connection timed out because it took more time than the system tcp stack allows
                 self.log.warning(
@@ -118,16 +114,14 @@ class TCPCheck(AgentCheck):
                     ),
                 )
             else:
-                self.log.info("%s:%d is DOWN (%s). Connection failed after %d ms", self.addr, self.port, str(e), length)
+                self.log.info("%s:%d is DOWN (%s). Connection failed after %d ms", self.url, self.port, str(e), length)
                 self.report_as_service_check(
                     AgentCheck.CRITICAL, "{}. Connection failed after {} ms".format(str(e), length)
                 )
+
             if self.socket_type == socket.AF_INET:
-                self.log.debug("Attempting to re-resolve IP for %s:%d", self.addr, self.port)
-                try:
-                    self.resolve_ip()
-                except Exception:
-                    self.log.debug("Unable to re-resolve IP for %s:%d", self.addr, self.port)
+                self.log.debug("Will attempt to re-resolve IP for %s:%d on next run", self.url, self.port)
+                self._addr = None
 
     def report_as_service_check(self, status, msg=None):
         if status == AgentCheck.OK:

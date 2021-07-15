@@ -1,5 +1,5 @@
 ---
-title: Integration assets reference
+title: Integration Assets Reference
 kind: documentation
 ---
 
@@ -25,7 +25,7 @@ Configuration blocks follow a few guidelines:
 - All optional parameters are commented by default.
 - If a placeholder has a default value for an integration (like the status endpoint of an integration), it can be used instead of a generic placeholder.
 
-### @param specification
+### `@param` specification
 
 Practically speaking, the only command is `@param`, which is used to describe configuration blocks—primarily for documentation purposes. `@param` is implemented using one of the following forms:
 
@@ -84,7 +84,7 @@ The complete list of mandatory and optional attributes for the `manifest.json` f
 | `maintainer`                | String          | Mandatory          | Email of the owner of the integration.                                                                                                                                                                                   |
 | `manifest_version`          | String          | Mandatory          | Version of the current manifest.                                                                                                                                                                                         |
 | `name`                      | String          | Mandatory          | Unique name for the integration. Use the folder name for this parameter.                                                                                                                                                 |
-| `public_title`              | String          | Mandatory          | Title of the integration displayed on the documentation. Should follow the following format: `Datadog-<INTEGRATION_NAME> integration`.                                                                                   |
+| `public_title`              | String          | Mandatory          | Title of the integration displayed on the documentation. Should follow the following format: `<INTEGRATION_NAME>`.                                                                                   |
 | `short_description`         | String          | Mandatory          | This text appears at the top of the integration tile as well as the integration's rollover text on the integrations page. Maximum 80 characters.                                                                         |
 | `support`                   | String          | Mandatory          | Owner of the integration.                                                                                                                                                                                                |
 | `supported_os`              | Array of String | Mandatory          | List of supported OSs. Choose among `linux`,`mac_os`, and `windows`.                                                                                                                                                     |

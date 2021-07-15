@@ -165,6 +165,10 @@ PILOT_METRICS = {
     'pilot_xds_push_timeout_failures': 'xds.push.timeout_failures',
     'pilot_xds_pushes': 'xds.pushes',
     'pilot_xds_write_timeout': 'xds.write_timeout',
+    'pilot_xds_rds_reject': 'pilot.xds.rds_reject',
+    'pilot_xds_eds_reject': 'pilot.xds.eds_reject',
+    'pilot_xds_cds_reject': 'pilot.xds.cds_reject',
+    'pilot_xds_lds_reject': 'pilot.xds.lds_reject',
 }
 
 
@@ -236,6 +240,10 @@ ISTIOD_METRICS = {
     'pilot_xds_push_timeout_failures': 'pilot.xds.push.timeout_failures',
     'pilot_xds_pushes': 'pilot.xds.pushes',
     'pilot_xds_write_timeout': 'pilot.xds.write_timeout',
+    'pilot_xds_rds_reject': 'pilot.xds.rds_reject',
+    'pilot_xds_eds_reject': 'pilot.xds.eds_reject',
+    'pilot_xds_cds_reject': 'pilot.xds.cds_reject',
+    'pilot_xds_lds_reject': 'pilot.xds.lds_reject',
     'grpc_server_handled_total': 'grpc.server.handled_total',
     'grpc_server_handling_seconds': 'grpc.server.handling_seconds',
     'grpc_server_msg_received_total': 'grpc.server.msg_received_total',
@@ -303,4 +311,6 @@ ISTIOD_METRICS = {
     'process_virtual_memory_max_bytes': 'process.virtual_memory_max_bytes',
     'sidecar_injection_requests_total': 'sidecar_injection.requests_total',
     'sidecar_injection_success_total': 'sidecar_injection.success_total',
+    'sidecar_injection_failure_total': 'sidecar_injection.failure_total',
+    'sidecar_injection_skip_total': 'sidecar_injection.skip_total',
 }

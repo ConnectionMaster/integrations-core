@@ -12,11 +12,15 @@ Follow the instructions below to install and configure this check for an Agent r
 
 1. [Create a client machine][3] if one does not already exist
 2. Ensure the client machine has been [granted][4] the permission policy [arn:aws:iam::aws:policy/AmazonMSKReadOnlyAccess][5] or equivalent [credentials][6] are available
-3. Install the [Datadog Agent][7]
+3. Enable [open monitoring with Prometheus][13] on the MSK side to enable the JmxExporter and the NodeExporter.
+4. Install the [Datadog Agent][7]
 
 ### Configuration
 
+
 1. Edit the `amazon_msk.d/conf.yaml` file, in the `conf.d/` folder at the root of your Agent's configuration directory to start collecting your Amazon MSK performance data. See the [sample amazon_msk.d/conf.yaml][8] for all available configuration options.
+
+    **Note**: If you reuse the sample file, change the file name from `conf.yaml.example` to `conf.yaml`.
 
 2. [Restart the Agent][9].
 
@@ -30,17 +34,13 @@ Follow the instructions below to install and configure this check for an Agent r
 
 See [metadata.csv][11] for a list of metrics provided by this check.
 
-### Service Checks
-
-**aws.msk.can_connect**:<br>
-Returns `CRITICAL` if the Agent is unable to discover nodes of the MSK cluster. Otherwise, returns `OK`.
-
-**aws.msk.prometheus.health**:<br>
-Returns `CRITICAL` if the check cannot access a metrics endpoint. Otherwise, returns `OK`.
-
 ### Events
 
 The Amazon MSK check does not include any events.
+
+### Service Checks
+
+See [service_checks.json][14] for a list of service checks provided by this integration.
 
 ## Troubleshooting
 
@@ -58,3 +58,5 @@ Need help? Contact [Datadog support][12].
 [10]: https://docs.datadoghq.com/agent/guide/agent-commands/#agent-status-and-information
 [11]: https://github.com/DataDog/integrations-core/blob/master/amazon_msk/metadata.csv
 [12]: https://docs.datadoghq.com/help/
+[13]: https://docs.aws.amazon.com/msk/latest/developerguide/open-monitoring.html
+[14]: https://github.com/DataDog/integrations-core/blob/master/amazon_msk/assets/service_checks.json
