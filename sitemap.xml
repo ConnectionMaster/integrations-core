@@ -66,6 +66,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://datadoghq.dev/integrations-core/base/logs-crawlers/</loc>
+         <lastmod>2020-02-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://datadoghq.dev/integrations-core/base/metadata/</loc>
          <lastmod>2020-02-02</lastmod>
          <changefreq>daily</changefreq>
@@ -92,6 +97,11 @@
     </url>
     <url>
          <loc>https://datadoghq.dev/integrations-core/ddev/configuration/</loc>
+         <lastmod>2020-02-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://datadoghq.dev/integrations-core/ddev/multirepo/</loc>
          <lastmod>2020-02-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -141,16 +151,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://datadoghq.dev/integrations-core/meta/cd/</loc>
-         <lastmod>2020-02-02</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://datadoghq.dev/integrations-core/meta/ci/</loc>
-         <lastmod>2020-02-02</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://datadoghq.dev/integrations-core/meta/config-models/</loc>
          <lastmod>2020-02-02</lastmod>
          <changefreq>daily</changefreq>
@@ -171,12 +171,17 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://datadoghq.dev/integrations-core/process/integration-release/</loc>
+         <loc>https://datadoghq.dev/integrations-core/meta/ci/labels/</loc>
          <lastmod>2020-02-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://datadoghq.dev/integrations-core/tutorials/memory-profiling/</loc>
+         <loc>https://datadoghq.dev/integrations-core/meta/ci/testing/</loc>
+         <lastmod>2020-02-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://datadoghq.dev/integrations-core/meta/ci/validation/</loc>
          <lastmod>2020-02-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -187,6 +192,11 @@
     </url>
     <url>
          <loc>https://datadoghq.dev/integrations-core/tutorials/jmx/tools/</loc>
+         <lastmod>2020-02-02</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://datadoghq.dev/integrations-core/tutorials/logs/http-crawler/</loc>
          <lastmod>2020-02-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
